@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
 import static constants.Constants.HOME_PAGE_URL;
+import static constants.Constants.LOGIN_PAGE_URL;
 import static driver.SingletonDriver.getDriverInstance;
 
 public class TestRunner {
@@ -57,8 +58,7 @@ public class TestRunner {
     public void verifyThatUnauthorisedUserProceedsToLoginAfterClickOnWishlist() {
         homePage.waitVisibilityOfElement(10, homePage.getNavigationBar().getWishlistButton());
         homePage.getNavigationBar().goToWishlist();
-        Assertions.assertTrue(driver.getCurrentUrl()
-                        .equalsIgnoreCase("https://www.bookdepository.com/account/login"),
+        Assertions.assertTrue(driver.getCurrentUrl().equalsIgnoreCase(LOGIN_PAGE_URL),
                 "User should be redirected to 'Login' page");
     }
 

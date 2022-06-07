@@ -1,25 +1,26 @@
 package runner;
 
-import desktop.fragments.NavigationBar;
 import desktop.pages.AuthorizationPage;
 import desktop.pages.HomePage;
+import desktop.pages.SignInPage;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
+import regularExpressions.RegExpressions;
 
 import static constants.Constants.HOME_PAGE_URL;
 import static constants.Constants.LOGIN_PAGE_URL;
 import static driver.SingletonDriver.getDriverInstance;
 
-public class TestRunner {
+public class JUnitTestRunner {
 
     private static final WebDriver driver = getDriverInstance();
     private final HomePage homePage = new HomePage(driver);
-    private final NavigationBar navigationBar = new NavigationBar(driver);
     private final AuthorizationPage authorizationPage = new AuthorizationPage(driver);
+    private final SignInPage signInPage = new SignInPage(driver);
 
     @Before
     public void setup() {
@@ -28,19 +29,23 @@ public class TestRunner {
 
     @Test
     public void verifyRedirectionToSeparateSignInPageWithEmailNotFoundAlertMessage() {
-        homePage.waitVisibilityOfElement(10, navigationBar.getSignInOrJoinButton());
-        navigationBar.goToSignInOrJoin();
+        homePage.waitVisibilityOfElement(10, homePage.getNavigationBar().getSignInOrJoinButton());
+        homePage.getNavigationBar().goToSignInOrJoin();
         authorizationPage.switchToSignInIFrame();
-        authorizationPage.enterUserEmail("blah@blah.blah");
-        authorizationPage.enterUserPassword("blah-blah");
+        authorizationPage.enterUnregisteredUserEmail("blah@blah.blah");
+        authorizationPage.enterUnregisteredUserPassword("blah-blah");
         authorizationPage.clickUserSignIn();
-        SoftAssertions.assertSoftly(softly -> softly.assertThat(driver.getCurrentUrl().contains("signin"))
-                .withFailMessage("Redirection failed").isTrue());
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(driver.getCurrentUrl().contains("signin"))
+                    .withFailMessage("User wasn't redirected to Sign In page").isTrue();
+            softly.assertThat(signInPage.isSignInErrorDisplayed())
+                    .withFailMessage("Sign In error not displayed").isTrue();
+        });
     }
 
     @Test
     public void verifyThatSignInButtonClickable() {
-        homePage.waitVisibilityOfElement(10, navigationBar.getSignInOrJoinButton());
+        homePage.waitVisibilityOfElement(10, homePage.getNavigationBar().getSignInOrJoinButton());
         homePage.getNavigationBar().goToSignInOrJoin();
         Assertions.assertTrue(driver.getCurrentUrl().contains("login"),
                 "Current page should be 'Sign in or join' page");

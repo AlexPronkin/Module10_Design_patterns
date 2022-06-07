@@ -21,14 +21,17 @@ public class NavigationBar extends AbstractFragment {
     private WebElement signInOrJoinButton;
 
     public void goToOrderStatus(){
+        waitVisibilityOfElement(10, orderStatusButton);
         orderStatusButton.click();
     }
 
     public void goToWishlist(){
+        waitVisibilityOfElement(10, wishlistButton);
         wishlistButton.click();
     }
 
     public void goToSignInOrJoin(){
+        waitVisibilityOfElement(10, signInOrJoinButton);
         signInOrJoinButton.click();
     }
 

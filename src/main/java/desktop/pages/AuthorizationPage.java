@@ -39,7 +39,7 @@ public class AuthorizationPage extends AbstractPage {
         new AuthorizationPage(driver.switchTo().frame(signInIFrame));
     }
 
-    public void enterUserEmail(String email) {
+    public void enterUnregisteredUserEmail(String email) {
         waitVisibilityOfElement(10, userEmailField);
         userEmailField.sendKeys(email);
     }
@@ -48,7 +48,7 @@ public class AuthorizationPage extends AbstractPage {
         return userEmailField;
     }
 
-    public void enterUserPassword(String password){
+    public void enterUnregisteredUserPassword(String password){
         waitVisibilityOfElement(10, userPasswordField);
         userPasswordField.sendKeys(password);
     }
